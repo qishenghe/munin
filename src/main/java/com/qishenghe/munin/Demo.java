@@ -119,4 +119,8 @@ public class Demo {
         dictTransUtil.transResultCodeToMeaningMultiThread(dataList);
     }
 
+    public static void main(String[] args) {
+        System.out.println("qishenghe");
+    }
+
 }
