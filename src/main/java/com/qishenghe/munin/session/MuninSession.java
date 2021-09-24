@@ -14,7 +14,7 @@ import org.quartz.impl.StdSchedulerFactory;
 import java.util.*;
 
 /**
- * Mcp字典控制会话
+ * 字典控制会话
  *
  * @author qishenghe
  * @date 2021/6/5 18:07
@@ -34,7 +34,7 @@ public class MuninSession {
     private Boolean dictPackMutex;
 
     /**
-     * Mcp字典缓存容器初始化Job
+     * 字典缓存容器初始化Job
      */
     private List<DictPackInitJob> dictPackInitJobs;
 
@@ -85,8 +85,8 @@ public class MuninSession {
             List<DictPack> childrenDictPacks = new LinkedList<>();
             for (DictPackInitJob singleJob : dictPackInitJobs) {
                 // 生成容器
-                DictPack singleMcpDictPack = DictPack.createDictPackByInitData(singleJob.init());
-                childrenDictPacks.add(singleMcpDictPack);
+                DictPack singleDictPack = DictPack.createDictPackByInitData(singleJob.init());
+                childrenDictPacks.add(singleDictPack);
             }
             // 合并多源容器
             dictPack = DictPack.merge(childrenDictPacks.toArray(new DictPack[0]));
@@ -187,7 +187,7 @@ public class MuninSession {
         private Boolean dictPackMutex;
 
         /**
-         * Mcp字典缓存容器初始化Job
+         * 字典缓存容器初始化Job
          */
         private List<DictPackInitJob> dictPackInitJobs;
 
@@ -269,7 +269,7 @@ public class MuninSession {
          * @param dictCtrlUtilConfig 字典控制工具配置
          * @return 字典控制工具实例
          */
-        private DictCtrlUtil createMcpDictUtil(MuninSession muninSession, Map<String, String> dictCtrlUtilConfig) {
+        private DictCtrlUtil createDictCtrlUtil(MuninSession muninSession, Map<String, String> dictCtrlUtilConfig) {
             // 【默认】只读属性
             boolean readOnly = DictCtrlUtil.DEFAULT_READONLY;
             for (String configKey : dictCtrlUtilConfig.keySet()) {
@@ -323,7 +323,7 @@ public class MuninSession {
          * @param dictTransUtilConfig 字典数据转换工具配置
          * @return 字典数据转换工具实例
          */
-        private DictTransUtil createMcpDictTransUtil(MuninSession muninSession,
+        private DictTransUtil createDictTransUtil(MuninSession muninSession,
                         Map<String, String> dictTransUtilConfig) {
             // 生成对象
             return new DictTransUtil(muninSession);
@@ -359,7 +359,7 @@ public class MuninSession {
         /**
          * 生成Session
          *
-         * @return McpDictSession
+         * @return dictSession
          */
         public synchronized MuninSession getOrCreate() {
 
@@ -376,9 +376,9 @@ public class MuninSession {
             muninSession.setAutoRefreshCron(this.getAutoRefreshCron() == null ? getDefaultAutoRefreshCron()
                             : this.getAutoRefreshCron());
             // 字典控制工具
-            muninSession.setDictCtrlUtil(createMcpDictUtil(muninSession, this.dictCtrlUtilConfig));
+            muninSession.setDictCtrlUtil(createDictCtrlUtil(muninSession, this.dictCtrlUtilConfig));
             // 字典数据转换工具
-            muninSession.setDictTransUtil(createMcpDictTransUtil(muninSession, this.dictTransUtilConfig));
+            muninSession.setDictTransUtil(createDictTransUtil(muninSession, this.dictTransUtilConfig));
 
             // 按流程预设加载字典数据进字典缓存容器
             muninSession.refreshPack();
@@ -403,7 +403,7 @@ public class MuninSession {
             return dictPackInitJobs;
         }
 
-        public synchronized void setMcpDictPackInitJob(List<DictPackInitJob> dictPackInitJobs) {
+        public synchronized void setDictPackInitJob(List<DictPackInitJob> dictPackInitJobs) {
             this.dictPackInitJobs = dictPackInitJobs;
         }
 

@@ -5,7 +5,7 @@ import com.qishenghe.munin.cache.pack.DictEntity;
 import java.util.List;
 
 /**
- * Mcp字典缓存容器初始化Job
+ * 字典缓存容器初始化Job
  *
  * @author qishenghe
  * @date 2021/6/5 18:10
@@ -14,7 +14,7 @@ import java.util.List;
 public interface DictPackInitJob {
 
     /**
-     * Mcp字典缓存容器初始化函数
+     * 字典缓存容器初始化函数
      *
      * @return 字典缓存容器
      */
