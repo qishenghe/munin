@@ -63,7 +63,6 @@
         <url>git:https://github.com/qishenghe/munin.git</url>
     </scm>
 
-
     <!-- 开发者信息 -->
     <developers>
         <developer>
