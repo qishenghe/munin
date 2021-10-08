@@ -1,5 +1,6 @@
 package com.qishenghe.munin.session;
 
+import com.qishenghe.munin.banner.MuninBannerPrinter;
 import com.qishenghe.munin.cache.job.DictPackInitJob;
 import com.qishenghe.munin.cache.job.autofresh.DictPackAutoFreshJob;
 import com.qishenghe.munin.cache.pack.DictEntity;
@@ -362,6 +363,9 @@ public class MuninSession {
          * @return dictSession
          */
         public synchronized MuninSession getOrCreate() {
+
+            // 打印Banner
+            MuninBannerPrinter.printBanner();
 
             MuninSession muninSession = new MuninSession();
 
