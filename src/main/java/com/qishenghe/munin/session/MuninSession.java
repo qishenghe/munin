@@ -407,10 +407,6 @@ public class MuninSession {
             return dictPackInitJobs;
         }
 
-        public synchronized void setDictPackInitJob(List<DictPackInitJob> dictPackInitJobs) {
-            this.dictPackInitJobs = dictPackInitJobs;
-        }
-
         public synchronized String getAutoRefreshCron() {
             return autoRefreshCron;
         }

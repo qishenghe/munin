@@ -6,7 +6,7 @@
 
     <groupId>com.github.qishenghe</groupId>
     <artifactId>munin</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <name>munin</name>
     <description>Dictionary cache control kit</description>
     <url>https://github.com/qishenghe/munin.git</url>
@@ -14,7 +14,6 @@
     <properties>
         <java.version>1.8</java.version>
     </properties>
-
 
 
     <dependencies>
@@ -27,18 +26,18 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>20.0</version>
+        </dependency>
+
         <!-- Apache commons -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.11</version>
-        </dependency>
-
-        <!-- Google guava -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>16.0.1</version>
         </dependency>
 
         <!-- Quartz -->
@@ -139,7 +138,7 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <!--Compiler -->
+                    <!-- Compiler -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
@@ -153,11 +152,23 @@
                             <showWarnings>false</showWarnings>
                         </configuration>
                     </plugin>
-                    <!--Release -->
+                    <!-- Release -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-release-plugin</artifactId>
                         <version>2.5.1</version>
+                    </plugin>
+                    <!-- Jar -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                </manifest>
+                            </archive>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
