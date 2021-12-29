@@ -5,6 +5,8 @@ import com.qishenghe.munin.cache.job.DictPackInitJob;
 import com.qishenghe.munin.cache.job.autofresh.DictPackAutoFreshJob;
 import com.qishenghe.munin.cache.pack.DictEntity;
 import com.qishenghe.munin.cache.pack.DictPack;
+import com.qishenghe.munin.pool.DefaultMuninThreadPool;
+import com.qishenghe.munin.pool.MuninThreadPool;
 import com.qishenghe.munin.util.DictCtrlUtil;
 import com.qishenghe.munin.util.DictTransUtil;
 import lombok.Data;
@@ -58,6 +60,11 @@ public class MuninSession {
      * 字典数据转换工具
      */
     private DictTransUtil dictTransUtil;
+
+    /**
+     * 线程池配置
+     */
+    private MuninThreadPool muninThreadPool;
 
     /**
      * 获取builder
@@ -208,6 +215,11 @@ public class MuninSession {
         private Map<String, String> dictTransUtilConfig = new HashMap<>(0);
 
         /**
+         * 线程池配置
+         */
+        private MuninThreadPool muninThreadPool;
+
+        /**
          * 【set】设置多源字典加载互斥标记
          *
          * @param dictPackMutex 多源字典加载互斥标记
@@ -260,6 +272,16 @@ public class MuninSession {
          */
         public synchronized Builder setDictCtrlUtilConfig(Map<String, String> configMap) {
             this.dictCtrlUtilConfig.putAll(configMap);
+            return this;
+        }
+
+        /**
+         * 【set】引入外部自定义线程池
+         * @param muninThreadPool 自定义线程池
+         * @return builder
+         */
+        public synchronized Builder setMuninThreadPool (MuninThreadPool muninThreadPool) {
+            this.muninThreadPool = muninThreadPool;
             return this;
         }
 
@@ -386,6 +408,9 @@ public class MuninSession {
 
             // 按流程预设加载字典数据进字典缓存容器
             muninSession.refreshPack();
+
+            // 设置线程池
+            muninSession.setMuninThreadPool(this.muninThreadPool == null ? new DefaultMuninThreadPool() : this.muninThreadPool);
 
             // 启动自刷新流程
             if (!StringUtils.isEmpty(this.autoRefreshCron)) {

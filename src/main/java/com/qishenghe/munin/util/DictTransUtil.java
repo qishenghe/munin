@@ -27,18 +27,6 @@ public class DictTransUtil {
     private transient MuninSession muninSession;
 
     /**
-     * 线程工厂（显式定义名称）
-     */
-    private static ThreadFactory nameFactory =
-                    new ThreadFactoryBuilder().setNameFormat("DictTransUtil-ThreadPool-%d").build();
-
-    /**
-     * 转换工具独立线程池（FixedThreadPool，poolSize：50）（阻塞队列MaxSize：2000）（抛弃策略：CallerRunsPolicy）
-     */
-    private static ExecutorService transUtilThreadPool = new ThreadPoolExecutor(50, 50, 0L, TimeUnit.MILLISECONDS,
-                    new LinkedBlockingQueue<>(2000), nameFactory, new ThreadPoolExecutor.CallerRunsPolicy());
-
-    /**
      * 构造
      *
      * @param muninSession muninSession
@@ -122,7 +110,7 @@ public class DictTransUtil {
                                 beforeTransCopyToField.setAccessible(true);
                                 overTransCopyToField.setAccessible(true);
                                 // 顺序修改
-                                beforeTransCopyToField.set(result, code);
+                                beforeTransCopyToField.set(result, field.get(result));
                                 overTransCopyToField.set(result, meaning);
                             }
                         } else {
@@ -195,7 +183,7 @@ public class DictTransUtil {
         List<Future> futureList = new LinkedList<>();
         for (T single : resultList) {
             Future<Boolean> singleFuture =
-                            transUtilThreadPool.submit(() -> transResultCodeToMeaning(single, dictPoint), true);
+                            muninSession.getMuninThreadPool().getThreadPoolCpu().submit(() -> transResultCodeToMeaning(single, dictPoint), true);
             futureList.add(singleFuture);
         }
 
