@@ -19,7 +19,7 @@ public @interface MuninPoint {
      * 
      * @return 字典编码
      */
-    String dictCode() default "";
+    String dictCode();
 
     /**
      * 字典名称
@@ -48,5 +48,19 @@ public @interface MuninPoint {
      * @return 属性名
      */
     String overTransCopyTo() default "";
+
+    /**
+     * 限制转换次数【暂未实现】
+     *
+     * @return true：限制，false：不限制
+     */
+    boolean limitTrans() default true;
+
+    /**
+     * 可转换次数【暂未实现】
+     *
+     * @return 可执行转换的次数，默认为1
+     */
+    int ableTransTimes() default 1;
 
 }

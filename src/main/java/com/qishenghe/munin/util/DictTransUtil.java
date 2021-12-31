@@ -1,6 +1,5 @@
 package com.qishenghe.munin.util;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.qishenghe.munin.cache.pack.DictEntity;
 import com.qishenghe.munin.session.MuninSession;
 import lombok.Data;
@@ -45,7 +44,8 @@ public class DictTransUtil {
      * @change 2021/6/8 10:44 by qishenghe for init
      * @since 1.0.0
      */
-    public <T> void transResultCodeToMeaning(T result, Map<String, String> dictPoint) {
+    private <T> void transSingleResultCodeToMeaning(T result, Map<String, String> dictPoint) {
+
         // 判空
         if (result == null) {
             return;
@@ -123,6 +123,56 @@ public class DictTransUtil {
                 // 转换时异常，冷处理
             }
         }
+    }
+
+    /**
+     * 编码根据字典向原值转换（递归处理用户自定义类型的属性）
+     * 
+     * @param result 结果
+     * @param dictPoint 字典指向（字典指向优先级大于属性注解）
+     * @since 1.0.0
+     * @author qishenghe
+     * @date 12/31/21 10:12 AM
+     * @change 12/31/21 10:12 AM by shenghe.qi@relxtech.com for init
+     */
+    public <T> void transResultCodeToMeaning (T result, Map<String, String> dictPoint) {
+
+        Map<String, Field> fieldMap = getObjectFieldMap(result);
+
+        for (String fieldName : fieldMap.keySet()) {
+
+            Field field = fieldMap.get(fieldName);
+
+            field.setAccessible(true);
+
+            try {
+                Object obj = field.get(result);
+                if (obj != null && judgmentCustomClass(obj.getClass())) {
+                    // 该属性为用户自定义类型 且 不为空
+                    transResultCodeToMeaning(obj, dictPoint);
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        transSingleResultCodeToMeaning(result, dictPoint);
+
+    }
+
+    /**
+     * 【封装】判断类型是否是自定义类
+     * 
+     * @param clazz 类
+     * @return 是否是自定义类（true：是，false：否）
+     * @since 1.0.0
+     * @author qishenghe
+     * @date 12/31/21 10:51 AM
+     * @change 12/31/21 10:51 AM by shenghe.qi@relxtech.com for init
+     */
+    private static boolean judgmentCustomClass(Class<?> clazz) {
+        return clazz != null && clazz.getClassLoader() != null;
     }
 
     /**
