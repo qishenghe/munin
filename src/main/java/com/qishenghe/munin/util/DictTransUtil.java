@@ -137,6 +137,29 @@ public class DictTransUtil {
      */
     public <T> void transResultCodeToMeaning (T result, Map<String, String> dictPoint) {
 
+        // 递归扫描自定义类，HashSet用于存储已经转换的类对象，当出现重复时说明对象已进行过转换，自动跳过
+        transResultCodeToMeaning(result, dictPoint, new HashSet<>());
+
+    }
+
+    /**
+     * 递归处理对象下的所有自定义类
+     * TODO 需要考虑当result对象使用了lombok的data注解时，hashCode方法和toString方法环图情况下调用导致的栈溢出问题
+     * 
+     * @param result 结果
+     * @param dictPoint 字典指向（字典指向优先级大于属性注解）
+     * @param overTransObjectSet 存储递归处理过程中已经转换过的对象
+     * @since 1.0.0
+     * @author qishenghe
+     * @date 12/31/21 6:27 PM
+     * @change 12/31/21 6:27 PM by shenghe.qi@relxtech.com for init
+     */
+    private <T> void transResultCodeToMeaning (T result, Map<String, String> dictPoint, Set<Object> overTransObjectSet) {
+
+        transSingleResultCodeToMeaning(result, dictPoint);
+        // 标记该对象已被处理
+        overTransObjectSet.add(result);
+
         Map<String, Field> fieldMap = getObjectFieldMap(result);
 
         for (String fieldName : fieldMap.keySet()) {
@@ -147,17 +170,20 @@ public class DictTransUtil {
 
             try {
                 Object obj = field.get(result);
-                if (obj != null && judgmentCustomClass(obj.getClass())) {
-                    // 该属性为用户自定义类型 且 不为空
-                    transResultCodeToMeaning(obj, dictPoint);
+
+                // 判断当前对象是否已被处理，如果已被处理说明出现环图情况，跳出后续操作
+                if (!overTransObjectSet.contains(obj)) {
+                    if (obj != null && judgmentCustomClass(obj.getClass())) {
+                        // 该属性为用户自定义类型 且 不为空
+                        transResultCodeToMeaning(obj, dictPoint, overTransObjectSet);
+                    }
                 }
+
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
 
         }
-
-        transSingleResultCodeToMeaning(result, dictPoint);
 
     }
 
