@@ -49,3 +49,7 @@
 * **真正可插拔的高可用性**
   
   你的场景不仅仅是字典数据的转换吗？没关系，重写转换函数可以实现任何转换规则，即使不依赖内置的缓存容器，也可以使用
+
+## maven坐标
+   groupId : com.github.qishenghe
+   artifactId : munin
