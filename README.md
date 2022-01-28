@@ -1,4 +1,6 @@
-<img src="doc/munin_logo.png" width="70%" syt height="20%" />
+<div  align="center">
+<img src="doc/munin_logo.png" width="30%" syt height="30%" style="zoom:30%"/>
+</div>
 
 # Munin: Dictionary cache control kit
 
