@@ -1,4 +1,4 @@
-# munin
+<img src="doc/munin_logo.png" width="70%" syt height="20%" />
 
 # Munin: Dictionary cache control kit
 
