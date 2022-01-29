@@ -74,4 +74,8 @@
 <img src="doc/munin_dingding_code.png" width="30%" syt height="30%" style="zoom:30%"/>
 </div>
 
+* **微信**
 
+<div  align="center">
+<img src="doc/munin_wechat_code.png" width="30%" syt height="30%" style="zoom:30%"/>
+</div>
