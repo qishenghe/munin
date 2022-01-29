@@ -66,6 +66,10 @@
    
    &emsp;&emsp;artifactId : munin
 
+* **开发文档**
+
+   &emsp;&emsp;[Wiki](https://github.com/qishenghe/munin/wiki/)
+
 ## 加入我们
 
 * **钉钉**
