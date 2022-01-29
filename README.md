@@ -1,4 +1,6 @@
-<img src="doc/munin_logo.png" width="70%" syt height="20%" />
+<div  align="center">
+<img src="doc/munin_logo.png" width="30%" syt height="30%" style="zoom:30%"/>
+</div>
 
 # Munin: Dictionary cache control kit
 
@@ -47,3 +49,11 @@
 * **真正可插拔的高可用性**
   
   你的场景不仅仅是字典数据的转换吗？没关系，重写转换函数可以实现任何转换规则，即使不依赖内置的缓存容器，也可以使用
+
+## 快速开始
+
+* **maven坐标**
+   
+   &emsp;&emsp;groupId : com.github.qishenghe
+   
+   &emsp;&emsp;artifactId : munin
