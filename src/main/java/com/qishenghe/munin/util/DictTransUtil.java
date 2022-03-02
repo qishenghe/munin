@@ -55,16 +55,18 @@ public class DictTransUtil {
         }
 
         // 获取类属性，转Map（key：属性名，value：属性对象）
-        Map<String, Field> fieldMap = getObjectFieldMap(result);
+//        Map<String, Field> fieldMap = getObjectFieldMap(result);
+        // 获取类属性，转Map（key：类路径|属性名，value：属性对象）
+        Map<String, Field> fieldMap = getAllFieldMap(result.getClass(), -1);
 
-        for (String fieldName : fieldMap.keySet()) {
+        for (String fieldKey : fieldMap.keySet()) {
             // 当前属性
-            Field field = fieldMap.get(fieldName);
+            Field field = fieldMap.get(fieldKey);
             // 字典编码
             String dictCode = null;
-            if (dictPoint.containsKey(fieldName)) {
+            if (dictPoint.containsKey(field.getName())) {
                 // 指向map中存在该属性
-                dictCode = dictPoint.get(fieldName);
+                dictCode = dictPoint.get(field.getName());
             } else {
                 // 指向map中不存在
                 if (field.isAnnotationPresent(MuninPoint.class)) {
@@ -97,15 +99,15 @@ public class DictTransUtil {
                             } else {
                                 // 转换前覆盖指向空值修正（修改覆盖指向为当前字段）
                                 if (StringUtils.isEmpty(beforeTransCopyTo)) {
-                                    beforeTransCopyTo = fieldName;
+                                    beforeTransCopyTo = field.getName();
                                 }
                                 // 转换后覆盖指向空值修正（修改覆盖指向为当前字段）
                                 if (StringUtils.isEmpty(overTransCopyTo)) {
-                                    overTransCopyTo = fieldName;
+                                    overTransCopyTo = field.getName();
                                 }
                                 // 转换后Meaning保留优先级高于原值，所以先赋值转换前Code，后赋值转换后Meaning，防止转换后结果被Code覆盖
-                                Field beforeTransCopyToField = fieldMap.get(beforeTransCopyTo);
-                                Field overTransCopyToField = fieldMap.get(overTransCopyTo);
+                                Field beforeTransCopyToField = fieldMap.get(field.getDeclaringClass().getName() + "|" + beforeTransCopyTo);
+                                Field overTransCopyToField = fieldMap.get(field.getDeclaringClass().getName() + "|" + overTransCopyTo);
                                 // 设为可修改
                                 beforeTransCopyToField.setAccessible(true);
                                 overTransCopyToField.setAccessible(true);
@@ -348,6 +350,59 @@ public class DictTransUtil {
         } else {
             return new HashMap<>(0);
         }
+    }
+
+    /**
+     * 【封装】获取类属性
+     * 
+     * @param clazz clazz
+     * @param levelNum 向上（父类）搜索层数（注：-1表示无上限搜索模式）
+     * @return 类属性集合（List）
+     * @since 1.0.0
+     * @author qishenghe
+     * @date 3/2/22 4:10 PM
+     * @change 3/2/22 4:10 PM by shenghe.qi@relxtech.com for init
+     */
+    private static List<Field> getAllFieldList (Class clazz, int levelNum) {
+
+        Field[] declaredFields = clazz.getDeclaredFields();
+
+        List<Field> resultList = new ArrayList<>(Arrays.asList(declaredFields));
+
+        Class superClass = clazz.getSuperclass();
+        if (superClass != null) {
+
+            if (levelNum > 0 || levelNum == -1) {
+                List<Field> fieldList = getAllFieldList(superClass, levelNum - 1);
+                resultList.addAll(fieldList);
+            }
+
+        }
+        return resultList;
+    }
+
+    /**
+     * 【封装】获取类属性
+     * 
+     * @param clazz clazz
+     * @param levelNum 向上（父类）搜索层数（注：-1表示无上限搜索模式）
+     * @return 类属性集合（Map：key：类路径|属性名）
+     * @since 1.0.0
+     * @author qishenghe
+     * @date 3/2/22 4:14 PM
+     * @change 3/2/22 4:14 PM by shenghe.qi@relxtech.com for init
+     */
+    private static Map<String, Field> getAllFieldMap (Class clazz, int levelNum) {
+
+        List<Field> allFieldList = getAllFieldList(clazz, levelNum);
+
+        Map<String, Field> resultMap = new HashMap<>();
+
+        for (Field singleField : allFieldList) {
+            String key = singleField.getDeclaringClass().getName() + "|" + singleField.getName();
+            resultMap.put(key, singleField);
+        }
+        return resultMap;
     }
 
 }
