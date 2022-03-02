@@ -6,7 +6,7 @@
 
     <groupId>com.github.qishenghe</groupId>
     <artifactId>munin</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6-SNAPSHOT</version>
     <name>munin</name>
     <description>Dictionary cache control kit</description>
     <url>https://github.com/qishenghe/munin.git</url>
