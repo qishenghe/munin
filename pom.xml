@@ -48,6 +48,7 @@
             <version>2.3.0</version>
         </dependency>
 
+        <!-- druid -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
