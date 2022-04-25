@@ -31,6 +31,11 @@ public class GravelJdbcInitJob implements DictPackInitJob {
     private GravelJdbc gravel;
 
     /**
+     * [data source]
+     */
+    private DruidDataSource dataSource;
+
+    /**
      * init
      * 
      * @return 标准输出
@@ -42,24 +47,15 @@ public class GravelJdbcInitJob implements DictPackInitJob {
     @Override
     public List<DictEntity> init() {
 
-        DruidDataSource druidDataSource = new DruidDataSource();
+        if (this.dataSource == null || !this.dataSource.isEnable()) {
 
-        druidDataSource.setUrl(gravel.getUrl());
-        druidDataSource.setUsername(gravel.getUsername());
-        druidDataSource.setPassword(gravel.getPassword());
-        if (!StringUtils.isEmpty(gravel.getDriver())) {
-            druidDataSource.setDriverClassName(gravel.getDriver());
-        }
+            if (this.dataSource != null) {
+                //  关闭不可用的连接池
+                this.dataSource.close();
+            }
 
-        druidDataSource.setInitialSize(1);
-        druidDataSource.setAsyncInit(true);
-
-        // 初始化
-        try {
-            druidDataSource.init();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("【gravel】数据库链接池初始化异常");
+            // 创建数据库连接池
+            this.dataSource = createDataSource(this.gravel);
         }
 
         // 创建查询sql
@@ -72,7 +68,7 @@ public class GravelJdbcInitJob implements DictPackInitJob {
         // 执行sql
         List<Map<String, Object>> mapList;
         try {
-            mapList = JdbcUtils.executeQuery(druidDataSource, sql);
+            mapList = JdbcUtils.executeQuery(this.dataSource, sql);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("【gravel】数据库查询失败");
@@ -80,8 +76,6 @@ public class GravelJdbcInitJob implements DictPackInitJob {
 
         // 将查询结果处理成标准输出
         List<DictEntity> resultList = processQueryResult(mapList);
-
-        druidDataSource.close();
 
         return resultList;
     }
@@ -186,5 +180,39 @@ public class GravelJdbcInitJob implements DictPackInitJob {
         return resultList;
     }
 
+    /**
+     * 创建数据源连接池
+     * 
+     * @param gravel gravel
+     * @return 数据源连接池
+     * @since 1.0.0
+     * @author qishenghe
+     * @date 4/25/22 11:17 AM
+     * @change 4/25/22 11:17 AM by shenghe.qi@relxtech.com for init
+     */
+    private DruidDataSource createDataSource (GravelJdbc gravel) {
+
+        DruidDataSource druidDataSource = new DruidDataSource();
+
+        druidDataSource.setUrl(gravel.getUrl());
+        druidDataSource.setUsername(gravel.getUsername());
+        druidDataSource.setPassword(gravel.getPassword());
+        if (!StringUtils.isEmpty(gravel.getDriver())) {
+            druidDataSource.setDriverClassName(gravel.getDriver());
+        }
+
+        druidDataSource.setInitialSize(1);
+        druidDataSource.setAsyncInit(true);
+
+        // 初始化
+        try {
+            druidDataSource.init();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("【gravel】数据库链接池初始化异常");
+        }
+
+        return druidDataSource;
+    }
 
 }
