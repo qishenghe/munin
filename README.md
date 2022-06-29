@@ -83,3 +83,9 @@
 <!-- <div  align="center"> -->
 <!-- <img src="doc/munin_wechat_code.png" width="30%" syt height="30%" style="zoom:30%"/> -->
 <!-- </div> -->
+
+## 其他
+
+* **Hugin**
+   
+   &emsp;&emsp;[Hugin]([https://github.com/qishenghe/munin/wiki/](https://github.com/qishenghe/hugin))
