@@ -88,4 +88,6 @@
 
 * **Hugin**
    
-   &emsp;&emsp;[Hugin]([https://github.com/qishenghe/munin/wiki/](https://github.com/qishenghe/hugin))
+   Hugin：Munin的衍生项目，专注数据处理
+   
+   &emsp;&emsp;[Hugin](https://github.com/qishenghe/hugin)
