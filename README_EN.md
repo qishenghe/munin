@@ -8,6 +8,9 @@
 
 -------
 
+
+[English](README_EN.md) | [中文](README.md)
+
 ## Munin
    &emsp;&emsp;Hugin（Huginn）and Munin（Muninn），They are two crows raised by Odin, a Nordic myth，Hugin's name means "thought"，Munin means "memory". The two of them fly to the world at dawn every morning, and then go back to report to Odin in the evening. They always perched on Odin's shoulder and whispered to him. Therefore, Odin is also known as "Raven God". (copied from Baidu Encyclopedia)
 
